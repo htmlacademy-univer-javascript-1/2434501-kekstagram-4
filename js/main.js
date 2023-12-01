@@ -1,3 +1,1 @@
-import { getPublishedPhotos } from './data';
-
-getPublishedPhotos();
+import './render-thumbnails.js';
