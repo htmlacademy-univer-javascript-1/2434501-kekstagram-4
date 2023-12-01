@@ -1,5 +1,5 @@
-import { generateRandomIntegerFromRange } from './util';
-import { getRandomInteger } from './util';
+import { generateRandomIntegerFromRange } from './utils.js';
+import { getRandomInteger } from './utils.js';
 
 const PHOTO_COUNT = 25;
 
