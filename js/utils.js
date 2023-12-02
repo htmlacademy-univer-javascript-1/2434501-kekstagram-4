@@ -21,4 +21,6 @@ function generateRandomIntegerFromRange (min, max) {
   };
 }
 
-export {getRandomInteger, generateRandomIntegerFromRange};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, generateRandomIntegerFromRange, isEscapeKey};
