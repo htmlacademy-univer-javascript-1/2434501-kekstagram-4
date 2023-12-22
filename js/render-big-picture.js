@@ -1,4 +1,4 @@
-import { isEscapeKey} from './utils.js';
+import {isEscapeKey} from './utils.js';
 
 const MAX_COMMENTS_VISIBLE = 5;
 let visibleCommentsCount;
@@ -27,13 +27,13 @@ const onDocumentKeydown = function (evt) {
   }
 };
 
-const onCloseBigPictureButton = function () {
+const onCloseBigPicture = function () {
   closeBigPicture();
 };
 
 const renderComments = function (commentsList) {
   bigPictureElements.comments.innerHTML = '';
-  console.log(visibleCommentsCount);
+  // console.log(visibleCommentsCount);
   for (let i = 0; i < commentsList.length; i++) {
     if (i === visibleCommentsCount) {
       break;
@@ -49,20 +49,18 @@ const renderComments = function (commentsList) {
 
 const loadMoreComments = function (commentsList) {
   if (visibleCommentsCount + MAX_COMMENTS_VISIBLE > commentsList.length) {
-    console.log('Загрузка if');
+    // console.log('Загрузка if');
     bigPictureElements.commentsCount.textContent = commentsList.length;
     visibleCommentsCount = commentsList.length;
     bigPictureElements.commentsLoaderButton.classList.add('hidden');
   } else {
-    console.log('Загрузка else');
+    // console.log('Загрузка else');
     visibleCommentsCount += MAX_COMMENTS_VISIBLE;
     bigPictureElements.commentsCount.textContent = visibleCommentsCount;
   }
-  console.log('Теперь видно ком.', visibleCommentsCount);
+  // console.log('Теперь видно ком.', visibleCommentsCount);
   renderComments(commentsList, visibleCommentsCount);
 };
-
-
 
 
 const openBigPicture = function (url, description, likesNumber, commentsNumber, commentsList) {
@@ -87,17 +85,17 @@ const openBigPicture = function (url, description, likesNumber, commentsNumber, 
   }
 
 
-  console.log('Видно ком.', visibleCommentsCount);
+  // console.log('Видно ком.', visibleCommentsCount);
   renderComments(commentsList, visibleCommentsCount);
 
   const onLoadMoreComments = function () {
-    console.log('current coms', visibleCommentsCount);
+    // console.log('current coms', visibleCommentsCount);
     loadMoreComments(commentsList);
   };
 
   bigPictureElements.commentsLoaderButton.addEventListener('click', onLoadMoreComments);
 
-  bigPictureElements.closeBigPictureButton.addEventListener('click', onCloseBigPictureButton);
+  bigPictureElements.closeBigPictureButton.addEventListener('click', onCloseBigPicture);
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
