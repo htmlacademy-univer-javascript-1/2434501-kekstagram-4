@@ -1,5 +1,7 @@
 import {isEscapeKey} from '../utils.js';
 import './validate-form.js';
+import './photo-scaling.js';
+import './photo-filters.js';
 
 const imgUploadInput = document.querySelector('.img-upload__input');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
