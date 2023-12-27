@@ -1,3 +1,5 @@
+import {sendData} from '../network-api.js';
+import {showAlert} from '../utils.js';
 const uploadForm = document.querySelector('.img-upload__form');
 
 const pristine = new Pristine(uploadForm, {
@@ -37,14 +39,39 @@ const validateDescription = function (value) {
 pristine.addValidator(uploadForm.querySelector('.text__hashtags'), validateHashtags);
 pristine.addValidator(uploadForm.querySelector('.text__description'), validateDescription);
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+const submitButton = document.querySelector('.img-upload__submit');
 
-  const isValid = pristine.validate();
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
-  if (isValid) {
-    uploadForm.submit();
-  }
-});
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const setUploadPhotoFormSubmit = (onSuccess, onFailure) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(onFailure)
+        .finally(unblockSubmitButton);
+    } else showAlert('Форма не валидна');
+
+  });
+};
 
 
+export {setUploadPhotoFormSubmit};

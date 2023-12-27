@@ -14,6 +14,24 @@ const FILTER_OPTIONS = {
   'heat': {min: 1, max: 3, step: 0.1, filterName: 'brightness', measurement: ''}
 };
 
+
+const updateSlider = function () {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: FILTER_OPTIONS[currentFilter].min,
+      max: FILTER_OPTIONS[currentFilter].max,
+    },
+    step: FILTER_OPTIONS[currentFilter].step,
+    start: FILTER_OPTIONS[currentFilter].max
+  });
+  sliderElement.classList.remove('hidden');
+  imgUploadPreview.style = `filter: ${FILTER_OPTIONS[currentFilter].filterName}(${FILTER_OPTIONS[currentFilter].max}${FILTER_OPTIONS[currentFilter].measurement})`;
+};
+
+const resetFilter = function () {
+  document.querySelector('#effect-none').click();
+};
+
 const onChangeFilter = function (evt) {
   currentFilter = evt.target.value;
   if (currentFilter === 'none'){
@@ -21,16 +39,7 @@ const onChangeFilter = function (evt) {
     imgUploadPreview.removeAttribute('style');
     effectLevelValue.value = '100';
   } else {
-    sliderElement.noUiSlider.updateOptions({
-      range: {
-        min: FILTER_OPTIONS[currentFilter].min,
-        max: FILTER_OPTIONS[currentFilter].max,
-      },
-      step: FILTER_OPTIONS[currentFilter].step,
-      start: FILTER_OPTIONS[currentFilter].max
-    });
-    sliderElement.classList.remove('hidden');
-    imgUploadPreview.style = `filter: ${FILTER_OPTIONS[currentFilter].filterName}(${FILTER_OPTIONS[currentFilter].max}${FILTER_OPTIONS[currentFilter].measurement})`;
+    updateSlider();
   }
 };
 
@@ -54,3 +63,5 @@ sliderElement.noUiSlider.on('update', () => {
     imgUploadPreview.style = `filter: ${FILTER_OPTIONS[currentFilter].filterName}(${effectLevelValue.value}${FILTER_OPTIONS[currentFilter].measurement})`;
   }
 });
+
+export {resetFilter};
