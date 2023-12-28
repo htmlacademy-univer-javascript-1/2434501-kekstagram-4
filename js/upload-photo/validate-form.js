@@ -1,15 +1,28 @@
 import {sendData} from '../network-api.js';
 import {showAlert} from '../utils.js';
 const uploadForm = document.querySelector('.img-upload__form');
+const submitButton = document.querySelector('.img-upload__submit');
 
-let alertText = '';
+const pristine = new Pristine(uploadForm, {});
 
-const pristine = new Pristine(uploadForm, {
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
-});
+const AlertTextValues = {
+  EMPTY: '',
+  HASTAGS_REPEATED: 'Хэш-теги не должны повторяться!',
+  HASTAGS_MORE_THAN_5: 'Хэш-тегов не должно быть больше 5!',
+  HASHTAG_INVALID: 'Введен невалидный хэш-тег!',
+  COMMENT_TOO_LONG: 'Комментарий слишком длинный!'
+};
 
-const validateHashtags = function (value) {
-  alertText = '';
+let alertText = AlertTextValues.EMPTY;
+
+
+const validateHashtags = (value) => {
+  alertText = AlertTextValues.EMPTY;
   if (value === ''){
     return true;
   }
@@ -19,16 +32,16 @@ const validateHashtags = function (value) {
   let isHastagValid = true;
   const setOfHashtags = new Set(lowerHashtags);
   if (setOfHashtags.size !== lowerHashtags.length){
-    alertText = 'Хэш-теги не должны повторяться!';
+    alertText = AlertTextValues.HASTAGS_REPEATED;
     isHastagValid = false;
   } else {
     if (hashtags.length > 5) {
-      alertText = 'Хэш-тегов не должно быть больше 5!';
+      alertText = AlertTextValues.HASTAGS_MORE_THAN_5;
       isHastagValid = false;
     } else {
       for (const element of lowerHashtags) {
         if (!hashtagRule.test(element)) {
-          alertText = 'Введен невалидный хэш-тег!';
+          alertText = AlertTextValues.HASHTAG_INVALID;
           isHastagValid = false;
           break;
         }
@@ -38,22 +51,15 @@ const validateHashtags = function (value) {
   return isHastagValid;
 };
 
-const validateDescription = function (value) {
+const validateDescription = (value) => {
   if (value.length >= 140) {
-    alertText = 'Комментарий слишком длинный!';
+    alertText = AlertTextValues.COMMENT_TOO_LONG;
   }
   return value.length <= 140;
 };
 
 pristine.addValidator(uploadForm.querySelector('.text__hashtags'), validateHashtags);
 pristine.addValidator(uploadForm.querySelector('.text__description'), validateDescription);
-
-const submitButton = document.querySelector('.img-upload__submit');
-
-const SubmitButtonText = {
-  IDLE: 'Сохранить',
-  SENDING: 'Сохраняю...'
-};
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;

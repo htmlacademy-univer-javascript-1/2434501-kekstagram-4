@@ -1,12 +1,9 @@
 const filterButtons = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.img-upload__effect-level');
-sliderElement.classList.add('hidden');
 const imgUploadPreview = document.querySelector('.img-upload__preview').querySelector('img');
 const effectLevelValue = document.querySelector('.effect-level__value');
 
-let currentFilter = 'none';
-
-const FILTER_OPTIONS = {
+const FilterOptions = {
   'chrome': {min: 0, max: 1, step: 0.1, filterName: 'grayscale', measurement: ''},
   'sepia': {min: 0, max: 1, step: 0.1, filterName: 'sepia', measurement: ''},
   'marvin': {min: 0, max: 100, step: 1, filterName: 'invert', measurement: '%'},
@@ -14,30 +11,37 @@ const FILTER_OPTIONS = {
   'heat': {min: 1, max: 3, step: 0.1, filterName: 'brightness', measurement: ''}
 };
 
+const DEFAULT_EFFECT_MAX_VALUE = 100;
+const DEFAULT_EFFECT_MIN_VALUE = 100;
+const DEFAULT_STEP = 1;
 
-const updateSlider = function () {
+let currentFilter = 'none';
+
+sliderElement.classList.add('hidden');
+
+const updateSlider = () => {
   sliderElement.noUiSlider.updateOptions({
     range: {
-      min: FILTER_OPTIONS[currentFilter].min,
-      max: FILTER_OPTIONS[currentFilter].max,
+      min: FilterOptions[currentFilter].min,
+      max: FilterOptions[currentFilter].max,
     },
-    step: FILTER_OPTIONS[currentFilter].step,
-    start: FILTER_OPTIONS[currentFilter].max
+    step: FilterOptions[currentFilter].step,
+    start: FilterOptions[currentFilter].max
   });
   sliderElement.classList.remove('hidden');
-  imgUploadPreview.style = `filter: ${FILTER_OPTIONS[currentFilter].filterName}(${FILTER_OPTIONS[currentFilter].max}${FILTER_OPTIONS[currentFilter].measurement})`;
+  imgUploadPreview.style = `filter: ${FilterOptions[currentFilter].filterName}(${FilterOptions[currentFilter].max}${FilterOptions[currentFilter].measurement})`;
 };
 
-const resetFilter = function () {
+const resetFilter = () => {
   document.querySelector('#effect-none').click();
 };
 
-const onChangeFilter = function (evt) {
+const onChangeFilter = (evt) => {
   currentFilter = evt.target.value;
   if (currentFilter === 'none'){
     sliderElement.classList.add('hidden');
     imgUploadPreview.removeAttribute('style');
-    effectLevelValue.value = '100';
+    effectLevelValue.value = DEFAULT_EFFECT_MAX_VALUE;
   } else {
     updateSlider();
   }
@@ -49,18 +53,18 @@ for (const filterButton of filterButtons) {
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: 0,
-    max: 100,
+    min: DEFAULT_EFFECT_MIN_VALUE,
+    max: DEFAULT_EFFECT_MAX_VALUE,
   },
-  start: 100,
-  step: 1,
+  start: DEFAULT_EFFECT_MAX_VALUE,
+  step: DEFAULT_STEP,
   connect: 'lower',
 });
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = Number(sliderElement.noUiSlider.get());
   if (currentFilter !== 'none') {
-    imgUploadPreview.style = `filter: ${FILTER_OPTIONS[currentFilter].filterName}(${effectLevelValue.value}${FILTER_OPTIONS[currentFilter].measurement})`;
+    imgUploadPreview.style = `filter: ${FilterOptions[currentFilter].filterName}(${effectLevelValue.value}${FilterOptions[currentFilter].measurement})`;
   }
 });
 

@@ -1,8 +1,6 @@
 import {isEscapeKey} from './utils.js';
 
-const MAX_COMMENTS_VISIBLE = 5;
-let visibleCommentsCount = 0;
-
+const commentTemplate = document.querySelector('#comment-template').content;
 const bigPicture = document.querySelector('.big-picture');
 
 const bigPictureElements = {
@@ -16,21 +14,23 @@ const bigPictureElements = {
   closeBigPictureButton: bigPicture.querySelector('.big-picture__cancel')
 };
 
+const MAX_COMMENTS_VISIBLE = 5;
+let visibleCommentsCount = 0;
 
-const commentTemplate = document.querySelector('#comment-template').content;
+let onLoadMoreComments = () => {};
 
-const onDocumentKeydown = function (evt) {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 };
 
-const onCloseBigPicture = function () {
+const onCloseBigPicture = () => {
   closeBigPicture();
 };
 
-const renderComments = function (commentsList) {
+const renderComments = (commentsList) => {
   bigPictureElements.comments.textContent = '';
   for (let i = 0; i < commentsList.length; i++) {
     if (i === visibleCommentsCount) {
@@ -45,7 +45,7 @@ const renderComments = function (commentsList) {
   }
 };
 
-const loadMoreComments = function (commentsList) {
+const loadMoreComments = (commentsList) => {
   if (visibleCommentsCount + MAX_COMMENTS_VISIBLE > commentsList.length) {
     bigPictureElements.commentsCount.textContent = commentsList.length;
     visibleCommentsCount = commentsList.length;
@@ -57,9 +57,8 @@ const loadMoreComments = function (commentsList) {
   renderComments(commentsList, visibleCommentsCount);
 };
 
-let onLoadMoreComments = function() {};
 
-const openBigPicture = function (url, description, likesNumber, commentsNumber, commentsList) {
+const openBigPicture = (url, description, likesNumber, commentsNumber, commentsList) => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
@@ -81,7 +80,7 @@ const openBigPicture = function (url, description, likesNumber, commentsNumber, 
 
   renderComments(commentsList, visibleCommentsCount);
 
-  onLoadMoreComments = function () {
+  onLoadMoreComments = () => {
     loadMoreComments(commentsList);
   };
 

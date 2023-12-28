@@ -1,9 +1,9 @@
 import {openBigPicture} from './render-big-picture.js';
 import { getShuffledArray } from './utils.js';
+
 const thumbnailsContainer = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture').content;
 const thumbnailsListFragment = document.createDocumentFragment();
-
 const thumbnailsFilters = document.querySelector('.img-filters');
 const thumbnailsFilterDefault = document.querySelector('#filter-default');
 const thumbnailsFilterRandom = document.querySelector('#filter-random');
@@ -17,7 +17,7 @@ const compareComments = (postA, postB) => {
   return commentsCountB - commentsCountA;
 };
 
-const sortThumbnails = function (chosenFilter, thumbnailsArray) {
+const sortThumbnails = (chosenFilter, thumbnailsArray) => {
   if (chosenFilter === 'filter-discussed'){
     return thumbnailsArray.slice().sort(compareComments);
   } else if (chosenFilter === 'filter-random') {
@@ -33,8 +33,8 @@ const renderThumbnails = (thumbnailsArray) => {
     }
   }
   const chosenFilter = document.querySelector('.img-filters__button--active').id;
-  const sortedArray = sortThumbnails(chosenFilter, thumbnailsArray);
-  sortedArray.forEach((element) => {
+  const sortedthumbnailsArray = sortThumbnails(chosenFilter, thumbnailsArray);
+  sortedthumbnailsArray.forEach((element) => {
     const url = element.url;
     const description = element.description;
     const likesNumber = element.likes;
