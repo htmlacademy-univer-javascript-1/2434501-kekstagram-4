@@ -10,24 +10,6 @@ const thumbnailsFilterRandom = document.querySelector('#filter-random');
 const thumbnailsFilterDiscussed = document.querySelector('#filter-discussed');
 
 
-// const onFilterDefaultClick = function () {
-//   thumbnailsFilterDefault.classList.add('img-filters__button--active');
-//   thumbnailsFilterRandom.classList.remove('img-filters__button--active');
-//   thumbnailsFilterDiscussed.classList.remove('img-filters__button--active');
-// };
-
-// const onFilterRandomClick = function () {
-//   thumbnailsFilterRandom.classList.add('img-filters__button--active');
-//   thumbnailsFilterDefault.classList.remove('img-filters__button--active');
-//   thumbnailsFilterDiscussed.classList.remove('img-filters__button--active');
-// };
-
-// const onFilterDiscussedClick = function () {
-//   thumbnailsFilterDiscussed.classList.add('img-filters__button--active');
-//   thumbnailsFilterDefault.classList.remove('img-filters__button--active');
-//   thumbnailsFilterRandom.classList.remove('img-filters__button--active');
-// };
-
 const compareComments = (postA, postB) => {
   const commentsCountA = postA.comments.length;
   const commentsCountB = postB.comments.length;
