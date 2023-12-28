@@ -75,7 +75,9 @@ const setUploadPhotoFormSubmit = (onSuccess, onFailure) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
-        .catch(onFailure)
+        .catch((err) => {
+          onFailure(err.message);
+        })
         .finally(unblockSubmitButton);
     } else {
       showAlert(alertText);

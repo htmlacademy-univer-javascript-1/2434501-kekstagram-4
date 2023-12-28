@@ -4,6 +4,7 @@ import './photo-scaling.js';
 import './photo-filters.js';
 import { resetFilter } from './photo-filters.js';
 import {showErrorUploadMessage, showSuccessUploadMessage} from './upload-result-message.js';
+import { showAlert } from '../utils.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
@@ -41,7 +42,8 @@ const closeUploadFormWithSuccess = function () {
   showSuccessUploadMessage();
 };
 
-const closeUploadFormWithFailure = function () {
+const closeUploadFormWithFailure = function (alertText) {
+  showAlert(alertText);
   const isUploadSuccessful = false;
   closeUploadForm(isUploadSuccessful);
   showErrorUploadMessage();
