@@ -2,11 +2,14 @@ import {sendData} from '../network-api.js';
 import {showAlert} from '../utils.js';
 const uploadForm = document.querySelector('.img-upload__form');
 
+let alertText = '';
+
 const pristine = new Pristine(uploadForm, {
 
 });
 
 const validateHashtags = function (value) {
+  alertText = '';
   if (value === ''){
     return true;
   }
@@ -16,13 +19,16 @@ const validateHashtags = function (value) {
   let isHastagValid = true;
   const setOfHashtags = new Set(lowerHashtags);
   if (setOfHashtags.size !== lowerHashtags.length){
+    alertText = 'Хэш-теги не должны повторяться!';
     isHastagValid = false;
   } else {
     if (hashtags.length > 5) {
+      alertText = 'Хэш-тегов не должно быть больше 5!';
       isHastagValid = false;
     } else {
       for (const element of lowerHashtags) {
         if (!hashtagRule.test(element)) {
+          alertText = 'Введен невалидный хэш-тег!';
           isHastagValid = false;
           break;
         }
@@ -33,6 +39,9 @@ const validateHashtags = function (value) {
 };
 
 const validateDescription = function (value) {
+  if (value.length >= 140) {
+    alertText = 'Комментарий слишком длинный!';
+  }
   return value.length <= 140;
 };
 
@@ -68,7 +77,9 @@ const setUploadPhotoFormSubmit = (onSuccess, onFailure) => {
         .then(onSuccess)
         .catch(onFailure)
         .finally(unblockSubmitButton);
-    } else showAlert('Форма не валидна');
+    } else {
+      showAlert(alertText);
+    }
 
   });
 };
