@@ -61,9 +61,12 @@ const showUploadForm = function () {
 };
 
 function onDocumentKeydown (evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeUploadForm();
+  const focusedElement = document.activeElement;
+  if (!(focusedElement === textDescription || focusedElement === textHastags)) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeUploadForm();
+    }
   }
 }
 
