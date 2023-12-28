@@ -80,7 +80,7 @@ const renderThumbnails = (thumbnailsArray) => {
 };
 
 const filterDefaultClick = (cb) => {
-  thumbnailsFilterDefault.addEventListener('click', (evt) => {
+  thumbnailsFilterDefault.addEventListener('click', () => {
     thumbnailsFilterDefault.classList.add('img-filters__button--active');
     thumbnailsFilterRandom.classList.remove('img-filters__button--active');
     thumbnailsFilterDiscussed.classList.remove('img-filters__button--active');
@@ -89,7 +89,7 @@ const filterDefaultClick = (cb) => {
 };
 
 const filterRandomClick = (cb) => {
-  thumbnailsFilterRandom.addEventListener('click', (evt) => {
+  thumbnailsFilterRandom.addEventListener('click', () => {
     thumbnailsFilterRandom.classList.add('img-filters__button--active');
     thumbnailsFilterDefault.classList.remove('img-filters__button--active');
     thumbnailsFilterDiscussed.classList.remove('img-filters__button--active');
@@ -98,7 +98,7 @@ const filterRandomClick = (cb) => {
 };
 
 const filterDiscussedClick = (cb) => {
-  thumbnailsFilterDiscussed.addEventListener('click', (evt) => {
+  thumbnailsFilterDiscussed.addEventListener('click', () => {
     thumbnailsFilterDiscussed.classList.add('img-filters__button--active');
     thumbnailsFilterDefault.classList.remove('img-filters__button--active');
     thumbnailsFilterRandom.classList.remove('img-filters__button--active');
