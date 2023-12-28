@@ -17,32 +17,33 @@ const scaleValue = document.querySelector('.scale__control--value');
 const textHastags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 
-const resetFormInputs = function() {
-  scaleValue.value = '100%';
-  resetFilter();
-  textHastags.value = '';
-  textDescription.value = '';
+const resetFormInputs = function(isUploadSuccessful) {
+  if (isUploadSuccessful || isUploadSuccessful === null) {
+    resetFilter();
+    scaleValue.value = '100%';
+    textHastags.value = '';
+    textDescription.value = '';
+  }
   imgUploadInput.value = '';
 };
 
-const closeUploadForm = function () {
+const closeUploadForm = function (isUploadSuccessful = null) {
+  resetFormInputs(isUploadSuccessful);
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  resetFormInputs();
   document.removeEventListener('keydown', onDocumentKeydown);
   cancelUploadButton.removeEventListener('click', onCancelUpload);
 };
 
-const reopenUploadForm = function () {
-  imgUploadOverlay.classList.remove('hidden');
-};
-
 const closeUploadFormWithSuccess = function () {
+  const isUploadSuccessful = true;
+  closeUploadForm(isUploadSuccessful);
   showSuccessUploadMessage();
 };
 
 const closeUploadFormWithFailure = function () {
-  imgUploadOverlay.classList.add('hidden');
+  const isUploadSuccessful = false;
+  closeUploadForm(isUploadSuccessful);
   showErrorUploadMessage();
 };
 
@@ -74,4 +75,4 @@ setUploadPhotoFormSubmit(closeUploadFormWithSuccess, closeUploadFormWithFailure)
 
 imgUploadInput.addEventListener('change', showUploadForm);
 
-export {closeUploadForm, reopenUploadForm};
+export {closeUploadForm};
