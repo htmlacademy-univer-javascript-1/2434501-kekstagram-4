@@ -1,8 +1,6 @@
 import {isEscapeKey} from './utils.js';
 
-const MAX_COMMENTS_VISIBLE = 5;
-let visibleCommentsCount;
-
+const commentTemplate = document.querySelector('#comment-template').content;
 const bigPicture = document.querySelector('.big-picture');
 
 const bigPictureElements = {
@@ -16,24 +14,24 @@ const bigPictureElements = {
   closeBigPictureButton: bigPicture.querySelector('.big-picture__cancel')
 };
 
+const MAX_COMMENTS_VISIBLE = 5;
+let visibleCommentsCount = 0;
 
-const commentTemplate = document.querySelector('#comment-template').content;
+let onLoadMoreComments = () => {};
 
-
-const onDocumentKeydown = function (evt) {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 };
 
-const onCloseBigPicture = function () {
+const onCloseBigPicture = () => {
   closeBigPicture();
 };
 
-const renderComments = function (commentsList) {
-  bigPictureElements.comments.innerHTML = '';
-  // console.log(visibleCommentsCount);
+const renderComments = (commentsList) => {
+  bigPictureElements.comments.textContent = '';
   for (let i = 0; i < commentsList.length; i++) {
     if (i === visibleCommentsCount) {
       break;
@@ -47,26 +45,21 @@ const renderComments = function (commentsList) {
   }
 };
 
-const loadMoreComments = function (commentsList) {
+const loadMoreComments = (commentsList) => {
   if (visibleCommentsCount + MAX_COMMENTS_VISIBLE > commentsList.length) {
-    // console.log('Загрузка if');
     bigPictureElements.commentsCount.textContent = commentsList.length;
     visibleCommentsCount = commentsList.length;
     bigPictureElements.commentsLoaderButton.classList.add('hidden');
   } else {
-    // console.log('Загрузка else');
     visibleCommentsCount += MAX_COMMENTS_VISIBLE;
     bigPictureElements.commentsCount.textContent = visibleCommentsCount;
   }
-  // console.log('Теперь видно ком.', visibleCommentsCount);
   renderComments(commentsList, visibleCommentsCount);
 };
 
 
-const openBigPicture = function (url, description, likesNumber, commentsNumber, commentsList) {
+const openBigPicture = (url, description, likesNumber, commentsNumber, commentsList) => {
   bigPicture.classList.remove('hidden');
-  // bigPictureElements.commentsCount.classList.add('hidden');
-  // bigPictureElements.commentsLoaderButton.classList.add('hidden');
   document.body.classList.add('modal-open');
 
   bigPictureElements.img.src = url;
@@ -74,22 +67,20 @@ const openBigPicture = function (url, description, likesNumber, commentsNumber, 
   bigPictureElements.likes.textContent = likesNumber;
   bigPictureElements.commentsTotalCount.textContent = commentsNumber;
 
-  visibleCommentsCount = MAX_COMMENTS_VISIBLE;
-
-  bigPictureElements.commentsCount.textContent =
-    commentsList.length <= visibleCommentsCount
-      ? commentsList.length
-      : visibleCommentsCount;
+  if (commentsList.length < MAX_COMMENTS_VISIBLE){
+    visibleCommentsCount = commentsList.length;
+  } else {
+    visibleCommentsCount = MAX_COMMENTS_VISIBLE;
+  }
+  bigPictureElements.commentsCount.textContent =visibleCommentsCount;
   if (visibleCommentsCount >= commentsList.length) {
     bigPictureElements.commentsLoaderButton.classList.add('hidden');
   }
 
 
-  // console.log('Видно ком.', visibleCommentsCount);
   renderComments(commentsList, visibleCommentsCount);
 
-  const onLoadMoreComments = function () {
-    // console.log('current coms', visibleCommentsCount);
+  onLoadMoreComments = () => {
     loadMoreComments(commentsList);
   };
 
@@ -100,14 +91,14 @@ const openBigPicture = function (url, description, likesNumber, commentsNumber, 
 };
 
 
-const closeBigPicture = function () {
+function closeBigPicture () {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   bigPictureElements.commentsLoaderButton.classList.remove('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   bigPictureElements.closeBigPictureButton.removeEventListener('click', closeBigPicture);
-  bigPictureElements.commentsLoaderButton.removeEventListener('click', openBigPicture.onLoadMoreComments);
+  bigPictureElements.commentsLoaderButton.removeEventListener('click', onLoadMoreComments);
   visibleCommentsCount = 0;
-};
+}
 
 export {openBigPicture};

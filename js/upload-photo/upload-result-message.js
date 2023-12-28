@@ -1,5 +1,4 @@
 import { isEscapeKey } from '../utils.js';
-import { reopenUploadForm } from './render-upload-form.js';
 
 const body = document.querySelector('body');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -19,10 +18,7 @@ const onBodyClick = (evt) => {
   hideMessage();
 };
 
-const onCloseButtonClick = (evt) => {
-  if (evt.target.className === 'error__button') {
-    reopenUploadForm();
-  }
+const onCloseButtonClick = () => {
   hideMessage();
 };
 

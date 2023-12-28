@@ -1,12 +1,28 @@
 import {sendData} from '../network-api.js';
 import {showAlert} from '../utils.js';
 const uploadForm = document.querySelector('.img-upload__form');
+const submitButton = document.querySelector('.img-upload__submit');
 
-const pristine = new Pristine(uploadForm, {
+const pristine = new Pristine(uploadForm, {});
 
-});
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
-const validateHashtags = function (value) {
+const AlertTextValues = {
+  EMPTY: '',
+  HASTAGS_REPEATED: 'Хэш-теги не должны повторяться!',
+  HASTAGS_MORE_THAN_5: 'Хэш-тегов не должно быть больше 5!',
+  HASHTAG_INVALID: 'Введен невалидный хэш-тег!',
+  COMMENT_TOO_LONG: 'Комментарий слишком длинный!'
+};
+
+let alertText = AlertTextValues.EMPTY;
+
+
+const validateHashtags = (value) => {
+  alertText = AlertTextValues.EMPTY;
   if (value === ''){
     return true;
   }
@@ -16,13 +32,16 @@ const validateHashtags = function (value) {
   let isHastagValid = true;
   const setOfHashtags = new Set(lowerHashtags);
   if (setOfHashtags.size !== lowerHashtags.length){
+    alertText = AlertTextValues.HASTAGS_REPEATED;
     isHastagValid = false;
   } else {
     if (hashtags.length > 5) {
+      alertText = AlertTextValues.HASTAGS_MORE_THAN_5;
       isHastagValid = false;
     } else {
       for (const element of lowerHashtags) {
         if (!hashtagRule.test(element)) {
+          alertText = AlertTextValues.HASHTAG_INVALID;
           isHastagValid = false;
           break;
         }
@@ -32,19 +51,15 @@ const validateHashtags = function (value) {
   return isHastagValid;
 };
 
-const validateDescription = function (value) {
+const validateDescription = (value) => {
+  if (value.length >= 140) {
+    alertText = AlertTextValues.COMMENT_TOO_LONG;
+  }
   return value.length <= 140;
 };
 
 pristine.addValidator(uploadForm.querySelector('.text__hashtags'), validateHashtags);
 pristine.addValidator(uploadForm.querySelector('.text__description'), validateDescription);
-
-const submitButton = document.querySelector('.img-upload__submit');
-
-const SubmitButtonText = {
-  IDLE: 'Сохранить',
-  SENDING: 'Сохраняю...'
-};
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -66,9 +81,13 @@ const setUploadPhotoFormSubmit = (onSuccess, onFailure) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
-        .catch(onFailure)
+        .catch((err) => {
+          onFailure(err.message);
+        })
         .finally(unblockSubmitButton);
-    } else showAlert('Форма не валидна');
+    } else {
+      showAlert(alertText);
+    }
 
   });
 };
