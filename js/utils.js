@@ -21,6 +21,17 @@ function generateRandomIntegerFromRange (min, max) {
   };
 }
 
+const getShuffledArray = function (array) {
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex > 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+};
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const ALERT_SHOW_TIME = 3000;
@@ -46,4 +57,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomInteger, generateRandomIntegerFromRange, isEscapeKey, showAlert};
+export {getRandomInteger, generateRandomIntegerFromRange, isEscapeKey, showAlert, getShuffledArray};
